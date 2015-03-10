@@ -253,3 +253,6 @@ def constructWebsite():
             storyNum += 1
 
     saveFile(webpage, WEBSITE)
+
+if __name__ == '__main__':
+    constructWebsite()
