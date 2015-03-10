@@ -1,3 +1,7 @@
+"""
+Author: Nicholas Rutherford
+License: MIT
+"""
 import nltk
 import networkx as nx
 

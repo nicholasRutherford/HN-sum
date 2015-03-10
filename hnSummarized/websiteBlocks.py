@@ -1,3 +1,7 @@
+"""
+Author: Nicholas Rutherford
+License: MIT
+"""
 
 HEADER = """
 <!DOCTYPE html>

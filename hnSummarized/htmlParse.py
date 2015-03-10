@@ -1,11 +1,11 @@
 """
 Author: Nicholas Rutherford
+License: MIT
 """
 
 from bs4 import BeautifulSoup
 import magic
 import os
-import re
 from os import listdir
 import codecs
 

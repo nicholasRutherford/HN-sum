@@ -1,3 +1,8 @@
+"""
+Author: Nicholas Rutherford
+License: MIT
+"""
+
 import nltk
 import networkx as nx
 from nltk.corpus import stopwords
@@ -104,5 +109,5 @@ def selectSentences(rawText, K):
             skip = False
         else:
             skip = True
-    toReturn = re.sub( '\s+', ' ', toReturn ).strip()
+    toReturn = re.sub( r'\s+', ' ', toReturn ).strip()
     return toReturn

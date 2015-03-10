@@ -1,5 +1,6 @@
 """
 Author: Nicholas Rutherford
+License: MIT
 """
 
 import requests
@@ -8,7 +9,7 @@ import os
 import json
 from datetime import datetime
 import urllib2
-import pprint
+
 
 
 HTML_DIR = "./hnSummarized/html/"
@@ -61,7 +62,7 @@ for link in links:
 def getFolder(query):
     d = datetime.fromtimestamp(query["time"]).date().isoformat()
     path = HTML_DIR + d +"/"
-    try: 
+    try:
         os.makedirs(path)
     except OSError:
         if not os.path.isdir(path):
