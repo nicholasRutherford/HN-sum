@@ -20,7 +20,7 @@ def replace_spc_error_handler(error):
 # or raise the same or another exception
     return (u' ' * (error.end-error.start), error.end)
 
-codecs.register_error("replace_spc", replace_spc_error_handler) 
+codecs.register_error("replace_spc", replace_spc_error_handler)
 
 HTML_DIR = "./hnSummarized/html/"
 TEXT_DIR = "./hnSummarized/text/"
@@ -32,7 +32,7 @@ def getFolder(folder, downFile):
         os.makedirs(path)
     except OSError:
         if not os.path.isdir(path):
-            print "Error on making folder: ", d
+            print "Error on making folder: ", downFile
     return path + fName
 
 for folder in listdir(HTML_DIR):
@@ -45,9 +45,17 @@ for folder in listdir(HTML_DIR):
             rawHtml = rawFile.read()
             rawFile.close()
 
-            soup = BeautifulSoup(rawHtml, "html5lib")
-            rawText = soup.get_text()
-            rawText = rawText.encode("ascii", "replace_spc")
+            soup = BeautifulSoup(rawHtml, 'html.parser')# "html5lib")
+            paragraphs = soup.find_all('p')
+            rawText = ""
+
+            if len(paragraphs) > 0:
+                for para in paragraphs:
+                    rawText += para.get_text()
+                rawText = rawText.replace("\n", " ")
+                rawText = rawText.encode("ascii", "replace_spc")
+            else:
+                rawText = "No summary available."
         else:
             rawText = "No summary available."
 
