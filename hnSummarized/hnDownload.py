@@ -4,10 +4,8 @@ License: MIT
 """
 
 import requests
-
 from datetime import datetime
 import urllib2
-
 import sumUtil
 
 
@@ -17,87 +15,145 @@ HN_BASE = "https://news.ycombinator.com/item?id="
 CUT_OFF = 100
 
 
-def isGoodStory(q):
-    """Determins if a story is 'good'"""
-    if q["title"].lower().count('haskell') > 0:
+def isGoodStory(story):
+    """Determins if a story is 'good', aka greater than 100 votes
+        or is about haskell
+
+    Args:
+        story (dict) - A dictionary reprenting an HN item query result
+
+    Returns:
+        bool. True if the story is 'good', false otherwise
+    """
+    if story["title"].lower().count('haskell') > 0:
         return True
-    if q["score"] < 100:
+    if story["score"] < 100:
         return False
     return True
 
 
-def getStories(info):
+def newOnly(storyIDs, info):
+    """Takes all the stories and removes any which we've already downloaded
 
-    # Get top stories
-    r = requests.get(BASE_URL + "topstories.json")
-    rawLinks =  r.json()[:CUT_OFF]
+    Args:
+        storyIDs ([int]) - A list of HN story IDs
+        info (dict) - Dictionary of information on downloaded stories
 
-    links = []
-    for link in rawLinks:
+    Returns:
+        [int]. A list of HN story IDs for new stories only
+    """
+    newStories = []
+    for sID in storyIDs:
         try:
-            _ = info[str(link)]
-            print "Already have: ", link
+            _ = info[str(sID)]
+            print "Already have: ", sID
         except KeyError:
-            links.append(link)
+            newStories.append(sID)
+    return newStories
+
+def goodOnly(storyIDs):
+    """Takes all the stories and filters out any story that isn't good
+
+    Args:
+        storyIDs ([int]) - A list of HN story IDs
+
+    Returns:
+        [dict]. A list of HN story dictionaries
+    """
 
     goodStories = []
-    for link in links:
-        r = requests.get(BASE_URL + "item/" + str(link) + ".json")
+    for sID in storyIDs:
+        r = requests.get(BASE_URL + "item/" + str(sID) + ".json")
         query = r.json()
         try:
             if isGoodStory(query):
                 goodStories.append(query)
                 print query["title"], query["score"]
         except KeyError:
-            print "Error on ", str(link)
-
+            print "Error on ", str(sID)
     return goodStories
 
-def downloadLink(story, url):
-    # File name
-    name = str(story["id"]) + ".html"
+def getStories(info):
+    """Get the story IDs corresponding to good articles only
 
+    Args:
+        info (dict) - Dictionary of information on downloaded stories
+
+    Returns:
+        [dict]. A list of HN story dictionaries
+    """
+
+    # Get top stories
+    r = requests.get(BASE_URL + "topstories.json")
+    storyIDs =  r.json()[:CUT_OFF]
+
+    # Filter stories so only new, good stories are downloaded
+    return goodOnly(newOnly(storyIDs, info))
+
+def downloadStory(story, url):
+    """Save the content linked to by a story into the HTML_DIR
+
+    Args:
+        story (dict) - HN story dictionary
+        url (str) - The url linked by the story
+
+    Raises:
+        urllib2.HTTPError
+        urllib2.URLError
+    """
     # Download the link
     response = urllib2.urlopen(url)
     rawHtml = response.read()
 
+    # File name
+    name = str(story["id"]) + ".html"
+
     # Save the html file
     d = datetime.fromtimestamp(story["time"]).date().isoformat()
     path = HTML_DIR + d +"/"
+
     sumUtil.saveAndMakePath(path, name, rawHtml)
 
 
 def updateInformation(story, url, info):
+    """Update the information file with the new story
+
+    Args:
+        story (dict) - HN story dictionary
+        url (str) - The url linked by the story
+        info (dict) - Dictionary of information on downloaded stories
+
+    """
     title = story["title"]
     comments = HN_BASE + str(story["id"])
 
     i = {'title': title,
             'comments': comments,
             'url': url}
+
     info[str(story["id"])] = i
 
-def download():
+def downloadStories():
+    """Find the latest HN stories and download their linked content"""
     info = sumUtil.loadInfo()
 
     stories = getStories(info)
 
-    # Download the links for good stories
     print "downloading..."
-    for link in stories:
+    for story in stories:
         try:
             # If it is an internal link, preface it with base url
-            if link["url"] == "":
-                url = HN_BASE + str(link["id"])
+            if story["url"] == "":
+                url = HN_BASE + str(story["id"])
             else:
-                url = link["url"]
+                url = story["url"]
 
-            downloadLink(link, url)
-            updateInformation(link, url, info)
+            downloadStory(story, url)
+            updateInformation(story, url, info)
         except (urllib2.HTTPError, urllib2.URLError, ValueError):
-            print "Error on : ", link["title"]
+            print "Error on : ", story["title"]
 
-    # store info file
     sumUtil.saveInfo(info)
 
 if __name__ == '__main__':
-    download()
+    downloadStories()

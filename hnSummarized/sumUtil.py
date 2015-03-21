@@ -50,6 +50,14 @@ def loadInfo():
     return info
 
 def saveInfo(info):
+    """Saves the info.json file
+
+    Args:
+        info - The current info dictionary to save
+
+    Raises:
+        Exit - If unable to open the file
+    """
     try:
         rawFile = open(INFO_JSON, "w+")
     except IOError:
@@ -79,6 +87,17 @@ def saveFile(text, path):
     ofile.close()
 
 def saveAndMakePath(folderPath, fileName, text):
+    """Save the text into a file on the given path, creating parent
+        folders as needed
+
+    Args:
+        folderPath (str) - The path to folder where the file will be saved
+        fileName (str) - Name for the saved file
+        text (str) - The text to save
+
+    Raises:
+        IOError. If unable to open file.
+    """
     try:
         os.makedirs(folderPath)
     except OSError:

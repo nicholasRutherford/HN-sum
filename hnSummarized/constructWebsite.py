@@ -5,7 +5,6 @@ License: MIT
 
 import datetime
 import sys
-
 import websiteBlocks
 import sumUtil
 
