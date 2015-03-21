@@ -5,61 +5,41 @@ License: MIT
 
 from bs4 import BeautifulSoup
 import magic
-import os
-from os import listdir
 import codecs
+import sumUtil
 
-def replace_spc_error_handler(error):
-# error is an UnicodeEncodeError/UnicodeDecodeError instance
-# with these attributes:
-# object = unicode object being encoded
-# start:end = slice of object with error
-# reason = error message
-# Must return a tuple (replacement unicode object,
-# index into object to continue encoding)
-# or raise the same or another exception
-    return (u' ' * (error.end-error.start), error.end)
-
-codecs.register_error("replace_spc", replace_spc_error_handler)
 
 HTML_DIR = "./hnSummarized/html/"
 TEXT_DIR = "./hnSummarized/text/"
 
-def getFolder(folder, downFile):
-    path = TEXT_DIR + folder +"/"
-    fName = downFile.split(".")[0] + ".txt"
-    try:
-        os.makedirs(path)
-    except OSError:
-        if not os.path.isdir(path):
-            print "Error on making folder: ", downFile
-    return path + fName
 
-for folder in listdir(HTML_DIR):
-    for downFile in listdir(HTML_DIR + folder):
-        # Make sure the files are html files
-        path = HTML_DIR + folder + "/" + downFile
-        fileDesc = magic.from_file(path)
-        if fileDesc.split(",")[0] == "HTML document":
-            rawFile = file(path, "r")
-            rawHtml = rawFile.read()
-            rawFile.close()
+def replace_spc_error_handler(error):
+    return (u' ' * (error.end-error.start), error.end)
 
-            soup = BeautifulSoup(rawHtml, 'html.parser')# "html5lib")
-            paragraphs = soup.find_all('p')
+def isHTML(path):
+    fileDesc = magic.from_file(path)
+    return fileDesc.split(",")[0] == "HTML document"
+
+def parseAll():
+    codecs.register_error("replace_spc", replace_spc_error_handler)
+
+    for folder in sumUtil.listDirectory(HTML_DIR):
+        for downFile in sumUtil.listDirectory(HTML_DIR + folder):
             rawText = ""
+            path = HTML_DIR + folder + "/" + downFile
+            if isHTML(path):
+                rawHtml = sumUtil.loadFile()
+                soup = BeautifulSoup(rawHtml, 'html.parser')
+                paragraphs = soup.find_all('p')
 
-            if len(paragraphs) > 0:
                 for para in paragraphs:
                     rawText += para.get_text() + " "
                 rawText = rawText.replace("\n", " ")
                 rawText = rawText.encode("ascii", "replace_spc")
-            else:
-                rawText = "No summary available."
-        else:
-            rawText = "No summary available."
 
-        dPath = getFolder(folder, downFile)
-        rawFile = file(dPath, "w+")
-        rawFile.write(str(rawText))
-        rawFile.close()
+            path = TEXT_DIR + folder +"/"
+            fName = downFile.split(".")[0] + ".txt"
+            sumUtil.saveAndMakePath(path, fName, rawText)
+
+if __name__ == '__main__':
+    parseAll()
