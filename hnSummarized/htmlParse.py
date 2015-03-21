@@ -51,7 +51,7 @@ for folder in listdir(HTML_DIR):
 
             if len(paragraphs) > 0:
                 for para in paragraphs:
-                    rawText += para.get_text()
+                    rawText += para.get_text() + " "
                 rawText = rawText.replace("\n", " ")
                 rawText = rawText.encode("ascii", "replace_spc")
             else:

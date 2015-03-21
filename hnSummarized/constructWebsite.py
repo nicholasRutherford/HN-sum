@@ -3,44 +3,16 @@ Author: Nicholas Rutherford
 License: MIT
 """
 
-import os
-import json
 import datetime
 import sys
 
 import websiteBlocks
+import sumUtil
 
-
-INFO_JSON = "./hnSummarized/info.json"
 SUM_DIR = "./hnSummarized/summaries/"
 WEBSITE = "./hnSummarized/website/index.html"
 STORIES_PER_ROW = 2
 
-def loadInfo(fileName):
-    """Load the info.json file
-
-    Args:
-        fileName (str): The path to info.json.
-
-    Returns:
-        dict.  A dictionary whose keys are story ID's and contents are:
-                url - The link to the story
-                comments - The link to the HN comment section
-                title - The title of the story
-
-    Raises:
-        Exit - If unable to open the fileName passed in.
-    """
-    try:
-        infoFile = open(fileName, "r")
-    except IOError:
-        print "Error: Can't open the info.json file"
-        sys.exit(1)
-
-    info = json.load(infoFile)
-    infoFile.close()
-
-    return info
 
 def elementBlock(title, keywords, summary, article, comments):
     """Format given variables into the HTML code block for a story
@@ -84,48 +56,6 @@ def formatDate(itemDate):
 
         return websiteBlocks.DATE.format(dateText)
 
-def listDirectory(directory):
-    """List all the items in a directory, sorted in reverse by name.
-
-    Args:
-        directory (str): Path to the directory to list
-
-    Returns:
-        [str]: List of directory contents
-
-    Raises:
-        Exit - If unable to open the directory passed in.
-    """
-    try:
-        folderList = os.listdir(directory)
-    except OSError:
-        print "Error: Can't open the directory ", directory
-        sys.exit(1)
-
-    folderList.sort(reverse=True)
-    return folderList
-
-def loadText(path):
-    """Return the text in a file.
-
-    Args:
-        path (str): The path to the file.
-
-    Returns:
-        str. The text of the file.
-
-    Raises:
-        Exit. Invalid path given.
-    """
-    try:
-        rawFile = open(path, "r")
-    except IOError:
-        print "Error: Can't open the file ", path
-        sys.exit(1)
-
-    rawText = rawFile.read()
-    rawFile.close()
-    return rawText
 
 def loadHNData(info, fileID):
     """Load the data stored from the HN api
@@ -167,7 +97,7 @@ def formatStory(downFile, folder, info):
     """
 
     path = SUM_DIR + folder + "/" + downFile
-    summaryText = loadText(path)
+    summaryText = sumUtil.loadFile(path)
     keywords, summary = summaryText.split("\n")
 
     # ID is the name of the file (excluding extension)
@@ -208,20 +138,6 @@ def formatRows(downFile, folder, info, storyNum,):
 
     return storyText
 
-def saveFile(text, fileName):
-    """Save text in the given file.
-
-    Args:
-        text (str): The text to save
-        fileName (str): The file to save the text into
-
-    Raises:
-        IOError. If unable to open file.
-    """
-
-    ofile = open(fileName, "w+")
-    ofile.write(text)
-    ofile.close()
 
 
 def constructWebsite():
@@ -235,24 +151,27 @@ def constructWebsite():
     """
 
     # Load saved HN api data
-    info = loadInfo(INFO_JSON)
+    info = sumUtil.loadInfo()
 
     webpage = ""
     webpage += websiteBlocks.HEADER
 
     storyNum = 0
 
-    folderList = listDirectory(SUM_DIR)
-    for folder in folderList:
+    for folder in sumUtil.listDirectory(SUM_DIR):
 
         webpage += formatDate(folder)
 
-        fileList = listDirectory(SUM_DIR + folder)
+        fileList = sumUtil.listDirectory(SUM_DIR + folder)
         for downFile in fileList:
             webpage += formatRows(downFile, folder, info, storyNum)
             storyNum += 1
 
-    saveFile(webpage, WEBSITE)
+        # Close rows with imperfect number of stories
+        if len(fileList) % STORIES_PER_ROW != 0:
+            webpage += websiteBlocks.ROW_END
+
+    sumUtil.saveFile(webpage, WEBSITE)
 
 if __name__ == '__main__':
     constructWebsite()
