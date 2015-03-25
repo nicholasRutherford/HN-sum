@@ -9,7 +9,7 @@ import websiteBlocks
 import sumUtil
 
 SUM_DIR = "./hnSummarized/summaries/"
-WEBSITE = "./hnSummarized/website/index.html"
+WEBSITE = "./hnSummarized/website/"
 STORIES_PER_ROW = 2
 
 
@@ -137,6 +137,35 @@ def formatRows(downFile, folder, info, storyNum,):
 
     return storyText
 
+def formatPager(thisDay):
+    """Format the proper dates into the pagination code block
+
+    Args:
+        thisDay (str): The date as a string in the form yyyy-mm-dd
+
+    Returns:
+        str. HTML code for the date
+    """
+    y, m , d = thisDay.split("-")
+    dateOb = datetime.date(int(y), int(m), int(d))
+    prevFile = (dateOb - datetime.timedelta(days=1)).isoformat() + ".html"
+    nextFile = (dateOb + datetime.timedelta(days=1)).isoformat() + ".html"
+    return websiteBlocks.PAGER.format(prevFile, nextFile)
+
+def formatPagerIndex(thisDay):
+    """Format the proper date into the pagination for the index page
+
+    Args:
+        thisDay (str): The date as a string in the form yyyy-mm-dd
+
+    Returns:
+        str. HTML code for the date
+    """
+    y, m , d = thisDay.split("-")
+    dateOb = datetime.date(int(y), int(m), int(d))
+    prevFile = (dateOb - datetime.timedelta(days=2)).isoformat() + ".html"
+    return websiteBlocks.PAGER_INDEX.format(prevFile)
+
 
 
 def constructWebsite():
@@ -157,7 +186,7 @@ def constructWebsite():
 
     storyNum = 0
 
-    for folder in sumUtil.listDirectory(SUM_DIR):
+    for i, folder in enumerate(sumUtil.listDirectory(SUM_DIR)):
 
         webpage += formatDate(folder)
 
@@ -170,7 +199,17 @@ def constructWebsite():
         if len(fileList) % STORIES_PER_ROW != 0:
             webpage += websiteBlocks.ROW_END
 
-    sumUtil.saveFile(webpage, WEBSITE)
+        # Set up pagination
+        if i == 1:
+            webpage += formatPagerIndex(folder)
+            sumUtil.saveFile(webpage, WEBSITE + "index.html")
+            webpage = websiteBlocks.HEADER
+            storyNum = 0
+        if i > 1:
+            webpage += formatPager(folder)
+            sumUtil.saveFile(webpage, WEBSITE + folder + ".html")
+            webpage = websiteBlocks.HEADER
+            storyNum = 0
 
 if __name__ == '__main__':
     constructWebsite()

@@ -52,6 +52,18 @@ DATE = """
 </div>
 """
 
+PAGER = """
+<ul class="pager">
+  <li><a href="{0}">Previous</a></li>
+  <li><a href="{1}">Next</a></li>
+</ul>
+"""
+PAGER_INDEX = """
+<ul class="pager">
+  <li><a href="{0}">Next</a></li>
+</ul>
+"""
+
 FOOTER = """
 </body>
 </html>
