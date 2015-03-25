@@ -60,7 +60,7 @@ def parseAll():
             rawText = ""
             path = HTML_DIR + folder + "/" + downFile
             if isHTML(path):
-                rawHtml = sumUtil.loadFile()
+                rawHtml = sumUtil.loadFile(path)
                 rawText = parseHTML(rawHtml)
 
             path = TEXT_DIR + folder +"/"
