@@ -27,6 +27,7 @@ def loadFile(path):
     rawFile.close()
     return rawText
 
+
 def loadInfo():
     """Load the info.json file
 
@@ -49,6 +50,7 @@ def loadInfo():
     rawFile.close()
     return info
 
+
 def saveInfo(info):
     """Saves the info.json file
 
@@ -66,6 +68,7 @@ def saveInfo(info):
 
     json.dump(info, rawFile)
     rawFile.close()
+
 
 def saveFile(text, path):
     """Save text in the given file.
@@ -85,6 +88,7 @@ def saveFile(text, path):
 
     ofile.write(text)
     ofile.close()
+
 
 def saveAndMakePath(folderPath, fileName, text):
     """Save the text into a file on the given path, creating parent

@@ -9,6 +9,7 @@ from nltk.corpus import stopwords
 
 import re
 
+
 def word_tokenize(s, stop_words):
     """Convert a sentence into a list of words, excluding stop words
 
@@ -26,6 +27,7 @@ def word_tokenize(s, stop_words):
             quality_words.append(word)
     return quality_words
 
+
 def tokeniseSentences(rawText):
     """Convert a block of text into a list of sentences
 
@@ -42,6 +44,7 @@ def tokeniseSentences(rawText):
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
     return sent_detector.tokenize(rawText)
 
+
 def add_nodes(g, sentList):
     """Add sentence nodes to the graph
 
@@ -51,6 +54,7 @@ def add_nodes(g, sentList):
     """
     for sentence in sentList:
         g.add_node(sentence)
+
 
 def add_edges(g, sentList,stop_words):
     """Add weighted edges to the graph
@@ -78,6 +82,7 @@ def add_edges(g, sentList,stop_words):
                 w = wordCount / float((len(words1) + len(words2)))
                 g.add_edge(pair1[0], pair2[0], weight=w)
 
+
 def construct_graph(g, sentList, stop_words):
     """Add nodes and edges to the graph according to the textRank algorithm
 
@@ -88,6 +93,7 @@ def construct_graph(g, sentList, stop_words):
     """
     add_nodes(g, sentList)
     add_edges(g, sentList, stop_words)
+
 
 def text_rank(sentList, stop_words):
     """Performs the textRank algorithm to obtain 'importance' scores for
@@ -105,8 +111,9 @@ def text_rank(sentList, stop_words):
 
     construct_graph(g, sentList, stop_words)
     scores = nx.pagerank(g).items()
-    scores = sorted(scores, key=lambda x : x[1], reverse=True)
+    scores = sorted(scores, key=lambda x: x[1], reverse=True)
     return scores
+
 
 def summary_para(scores, sentList, K):
     """Constructs the summary text selecting the K best sentences and
@@ -126,7 +133,7 @@ def summary_para(scores, sentList, K):
     # Return sentences above cutoff in the order they appeared in the text
     toReturn = ""
 
-    skip = False # Used to insert '[...]' when sentences are skipped
+    skip = False  # Used to insert '[...]' when sentences are skipped
     for sentence in sentList:
         if sentence in good_sent:
             if skip:
@@ -139,7 +146,8 @@ def summary_para(scores, sentList, K):
             skip = True
 
     # Remove all excessive whitespace
-    return re.sub( r'\s+', ' ', toReturn ).strip()
+    return re.sub(r'\s+', ' ', toReturn).strip()
+
 
 def selectSentences(rawText, K):
     """Summarise text into K sentences using textRank
@@ -155,4 +163,4 @@ def selectSentences(rawText, K):
     sentList = tokeniseSentences(rawText)
     scores = text_rank(sentList, stop_words)
 
-    return  summary_para(scores, sentList, K)
+    return summary_para(scores, sentList, K)

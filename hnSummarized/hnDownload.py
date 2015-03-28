@@ -51,6 +51,7 @@ def newOnly(storyIDs, info):
             newStories.append(sID)
     return newStories
 
+
 def goodOnly(storyIDs):
     """Takes all the stories and filters out any story that isn't good
 
@@ -73,6 +74,7 @@ def goodOnly(storyIDs):
             print "Error on ", str(sID)
     return goodStories
 
+
 def getStories(info):
     """Get the story IDs corresponding to good articles only
 
@@ -85,10 +87,11 @@ def getStories(info):
 
     # Get top stories
     r = requests.get(BASE_URL + "topstories.json")
-    storyIDs =  r.json()[:CUT_OFF]
+    storyIDs = r.json()[:CUT_OFF]
 
     # Filter stories so only new, good stories are downloaded
     return goodOnly(newOnly(storyIDs, info))
+
 
 def downloadStory(story, url):
     """Save the content linked to by a story into the HTML_DIR
@@ -110,7 +113,7 @@ def downloadStory(story, url):
 
     # Save the html file
     d = datetime.fromtimestamp(story["time"]).date().isoformat()
-    path = HTML_DIR + d +"/"
+    path = HTML_DIR + d + "/"
 
     sumUtil.saveAndMakePath(path, name, rawHtml)
 
@@ -128,10 +131,11 @@ def updateInformation(story, url, info):
     comments = HN_BASE + str(story["id"])
 
     i = {'title': title,
-            'comments': comments,
-            'url': url}
+         'comments': comments,
+         'url': url}
 
     info[str(story["id"])] = i
+
 
 def downloadStories():
     """Find the latest HN stories and download their linked content"""

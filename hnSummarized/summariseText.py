@@ -4,7 +4,7 @@ import sumUtil
 
 
 TEXT_DIR = "./hnSummarized/text/"
-SUM_DIR  = "./hnSummarized/summaries/"
+SUM_DIR = "./hnSummarized/summaries/"
 NUM_SENTENCES = 10
 NUM_KEYWORDS = 4
 

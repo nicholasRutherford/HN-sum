@@ -23,6 +23,7 @@ def removeStop(wordList, stopList):
             goodWords.append(word)
     return goodWords
 
+
 def filterTags(wordList):
     """Remove words from the list that aren't nouns or adjectives
 
@@ -35,10 +36,11 @@ def filterTags(wordList):
     filteredWords = []
     tagWords = nltk.pos_tag(wordList)
     for word, tag in tagWords:
-        if tag =="NN" or tag =="JJ":
+        if tag == "NN" or tag == "JJ":
             filteredWords.append(word)
 
     return filteredWords
+
 
 def word_tokenize(text, stop_words):
     """Convert a block of text into a list of nouns and adjectives with
@@ -68,6 +70,7 @@ def add_nodes(g, wordList):
     for w in wordList:
         g.add_node(w)
 
+
 def add_edges(g, wordList, threshold):
     """Add edges to the nodes, each word is connected to the threshold
         number of words after it
@@ -92,6 +95,7 @@ def add_edges(g, wordList, threshold):
             except IndexError:
                 pass
 
+
 def construct_graph(g, wordList, threshold):
     """Adds nodes and edges according to the textRank algorithm
 
@@ -102,6 +106,7 @@ def construct_graph(g, wordList, threshold):
     """
     add_nodes(g, wordList)
     add_edges(g, wordList, threshold)
+
 
 def extract(wordList, K, threshold):
     """Finds K keywords from the word list
@@ -122,6 +127,7 @@ def extract(wordList, K, threshold):
     pairs = sorted(pairs, key=lambda x: x[1], reverse=True)
 
     return [x[0] for x in pairs[:K]]
+
 
 def extractKeywords(rawText, K=4, threshold=5):
     """Take a block of text and extract K keywords from it

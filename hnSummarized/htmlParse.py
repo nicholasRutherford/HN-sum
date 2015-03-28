@@ -13,9 +13,10 @@ HTML_DIR = "./hnSummarized/html/"
 TEXT_DIR = "./hnSummarized/text/"
 
 
-#Needed for the ascii encoder
+# Needed for the ascii encoder
 def replace_spc_error_handler(error):
     return (u' ' * (error.end-error.start), error.end)
+
 
 def isHTML(path):
     """Determines whether the file at the given path is an HTML file
@@ -28,6 +29,7 @@ def isHTML(path):
     """
     fileDesc = magic.from_file(path)
     return fileDesc.split(",")[0] == "HTML document"
+
 
 def parseHTML(rawHtml):
     """Parses an HTML string into just the raw text
@@ -47,6 +49,7 @@ def parseHTML(rawHtml):
     rawText = rawText.replace("\n", " ")
     return rawText.encode("ascii", "replace_spc")
 
+
 def parseAll():
     """Parse all the downloaded HTML files into plain text.
 
@@ -63,7 +66,7 @@ def parseAll():
                 rawHtml = sumUtil.loadFile(path)
                 rawText = parseHTML(rawHtml)
 
-            path = TEXT_DIR + folder +"/"
+            path = TEXT_DIR + folder + "/"
             fName = downFile.split(".")[0] + ".txt"
             sumUtil.saveAndMakePath(path, fName, rawText)
 
