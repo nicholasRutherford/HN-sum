@@ -5,7 +5,6 @@ License: MIT
 
 import requests
 from datetime import datetime
-import urllib2
 import sumUtil
 
 
@@ -105,8 +104,8 @@ def downloadStory(story, url):
         urllib2.URLError
     """
     # Download the link
-    response = urllib2.urlopen(url)
-    rawHtml = response.read()
+    response = requests.get(url)
+    rawHtml = response.text
 
     # File name
     name = str(story["id"]) + ".html"
@@ -154,7 +153,7 @@ def downloadStories():
 
             downloadStory(story, url)
             updateInformation(story, url, info)
-        except (urllib2.HTTPError, urllib2.URLError, ValueError):
+        except (ValueError):
             print "Error on : ", story["title"]
 
     sumUtil.saveInfo(info)
