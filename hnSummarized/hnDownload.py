@@ -162,6 +162,8 @@ def downloadStories():
             print "\t" + str(ValueError)
         except (requests.exceptions.TooManyRedirects):
             print "Redirect Error: " + story["title"]
+        except (requests.exceptions.SSLError):
+            print "SSL Error: " + story["title"]
 
     sumUtil.saveInfo(info)
 
