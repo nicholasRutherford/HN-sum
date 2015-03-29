@@ -8,18 +8,23 @@ SUM_DIR = "./hnSummarized/summaries/"
 NUM_SENTENCES = 10
 NUM_KEYWORDS = 4
 
-for folder in sumUtil.listDirectory(TEXT_DIR):
-    for downFile in sumUtil.listDirectory(TEXT_DIR + folder):
-        path = TEXT_DIR + folder + "/" + downFile
 
-        rawText = sumUtil.loadFile(path)
+def summariseAll():
+    for folder in sumUtil.listDirectory(TEXT_DIR):
+        for downFile in sumUtil.listDirectory(TEXT_DIR + folder):
+            path = TEXT_DIR + folder + "/" + downFile
 
-        # Summarise
-        summary = selectSentences(rawText, NUM_SENTENCES)
+            rawText = sumUtil.loadFile(path)
 
-        # Key Words
-        keyWordsList = extractKeywords(rawText, NUM_KEYWORDS)
-        keyWords = " | ".join(keyWordsList)
+            # Summarise
+            summary = selectSentences(rawText, NUM_SENTENCES)
 
-        toSave = keyWords + "\n" + summary
-        sumUtil.saveAndMakePath(SUM_DIR + folder + "/", downFile, toSave)
+            # Key Words
+            keyWordsList = extractKeywords(rawText, NUM_KEYWORDS)
+            keyWords = " | ".join(keyWordsList)
+
+            toSave = keyWords + "\n" + summary
+            sumUtil.saveAndMakePath(SUM_DIR + folder + "/", downFile, toSave)
+
+if __name__ == "__main__":
+    summariseAll()

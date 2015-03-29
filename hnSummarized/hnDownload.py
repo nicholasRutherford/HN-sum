@@ -100,12 +100,16 @@ def downloadStory(story, url):
         url (str) - The url linked by the story
 
     Raises:
-        urllib2.HTTPError
-        urllib2.URLError
+        RuntimeError - Invalid status code
+        requests.exceptions.TooManyRedirects
     """
     # Download the link
     response = requests.get(url)
+    if response.status_code != 200:
+        raise RuntimeError(str(response.status_code))
+
     rawHtml = response.text
+    rawHtml = rawHtml.encode("ascii", "ignore")
 
     # File name
     name = str(story["id"]) + ".html"
@@ -153,8 +157,11 @@ def downloadStories():
 
             downloadStory(story, url)
             updateInformation(story, url, info)
-        except (ValueError):
-            print "Error on : ", story["title"]
+        except (RuntimeError):
+            print "Invalid status code: " + story["title"]
+            print "\t" + str(ValueError)
+        except (requests.exceptions.TooManyRedirects):
+            print "Redirect Error: " + story["title"]
 
     sumUtil.saveInfo(info)
 

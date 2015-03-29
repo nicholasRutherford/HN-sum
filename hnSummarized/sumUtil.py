@@ -42,13 +42,14 @@ def loadInfo():
     """
     try:
         rawFile = open(INFO_JSON, "r")
+        info = json.load(rawFile)
+        rawFile.close()
+        return info
     except IOError:
-        print "Error: Can't open the file ", INFO_JSON
-        sys.exit(1)
-
-    info = json.load(rawFile)
-    rawFile.close()
-    return info
+        rawFile = open(INFO_JSON, "w+")
+        rawFile.write("{}")
+        rawFile.close()
+        return {}
 
 
 def saveInfo(info):
