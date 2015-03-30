@@ -129,6 +129,7 @@ def summary_para(scores, sentList, K):
         str - The K-sentence summary
     """
     good_sent = [x[0] for x in scores[:K]]
+    count_check = dict(zip(good_sent, [0 for x in good_sent]))
 
     # Return sentences above cutoff in the order they appeared in the text
     toReturn = ""
@@ -136,6 +137,8 @@ def summary_para(scores, sentList, K):
     skip = False  # Used to insert '[...]' when sentences are skipped
     for sentence in sentList:
         if sentence in good_sent:
+            if count_check[sentence] > 0:
+                continue
             if skip:
                 toReturn += " [...] "
             else:
