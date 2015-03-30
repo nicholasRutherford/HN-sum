@@ -139,6 +139,7 @@ def summary_para(scores, sentList, K):
         if sentence in good_sent:
             if count_check[sentence] > 0:
                 continue
+            count_check[sentence] += 1
             if skip:
                 toReturn += " [...] "
             else:
