@@ -64,6 +64,12 @@ PAGER_INDEX = """
 </ul>
 """
 
+PAGER_END = """
+<ul class="pager">
+  <li><a href="{0}">Previous</a></li>
+</ul>
+"""
+
 FOOTER = """
 </body>
 </html>

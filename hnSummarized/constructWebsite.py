@@ -5,11 +5,12 @@ License: MIT
 
 import datetime
 import sys
+import os
 import websiteBlocks
 import sumUtil
 
 SUM_DIR = "./hnSummarized/summaries/"
-WEBSITE = "./hnSummarized/website/index.html"
+WEBSITE_DIR = "./hnSummarized/website/"
 STORIES_PER_ROW = 2
 
 
@@ -29,6 +30,7 @@ def elementBlock(title, keywords, summary, article, comments):
     block = websiteBlocks.ELEMENT
     return block.format(title, keywords, summary, article, comments)
 
+
 def formatDate(itemDate):
     """Format the date into the HTML code block for the date
 
@@ -45,13 +47,13 @@ def formatDate(itemDate):
         return websiteBlocks.DATE.format("Today")
     else:
         try:
-            y, m , d = itemDate.split("-")
+            y, m, d = itemDate.split("-")
             dateOb = datetime.date(int(y), int(m), int(d))
         except ValueError:
             print "Warning: Invalid date format:", itemDate
             dateText = "------"
         else:
-            dateText = dateOb.strftime("%B %d, %Y") # January 01, 2015
+            dateText = dateOb.strftime("%B %d, %Y")  # January 01, 2015
 
         return websiteBlocks.DATE.format(dateText)
 
@@ -79,6 +81,7 @@ def loadHNData(info, fileID):
         print "Error: No info entry for ID: ", fileID
         sys.exit(1)
     return title, article, comments
+
 
 def formatStory(downFile, folder, info):
     """Format the story data into the HTML code block for a story
@@ -138,6 +141,62 @@ def formatRows(downFile, folder, info, storyNum,):
     return storyText
 
 
+def isToday(text):
+    """Whether the given date is today
+
+    Args:
+        text (str): The date as a string in the form yyyy-mm-dd
+
+    Returns:
+        bool. True if the given date is today
+    """
+    return datetime.date.today().isoformat() == text
+
+
+def isYesterday(text):
+    """Whether the given date is yesterday
+
+    Args:
+        text (str): The date as a string in the form yyyy-mm-dd
+
+    Returns:
+        bool. True if the given date is yesterday
+    """
+    yest = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    return text == yest
+
+
+def pagerIndex():
+    """Format the next page button on the index page
+
+    Returns:
+        str. HTML code for the page buttons
+    """
+    twoDays = (datetime.date.today() - datetime.timedelta(days=2)).isoformat()
+    twoDays += ".html"
+    return websiteBlocks.PAGER_INDEX.format(twoDays)
+
+
+def pager(text):
+    """Format the next, and previous buttons on the non-index pages
+
+    Args:
+        text (str): The date as a string in the form yyyy-mm-dd
+
+    Returns:
+        str. HTML code for the page button
+    """
+    year, month, day = text.split("-")
+    thisDate = datetime.date(int(year), int(month), int(day))
+    next = (thisDate - datetime.timedelta(days=1)).isoformat() + ".html"
+    prev = (thisDate + datetime.timedelta(days=1)).isoformat() + ".html"
+
+    if os.path.isfile(next):
+        return websiteBlocks.PAGER.format(prev, next)
+    else:
+        return websiteBlocks.PAGER_END.format(prev)
+
+
 def constructWebsite():
     """Contructs a website from the summarized data
 
@@ -145,7 +204,7 @@ def constructWebsite():
         Summaries must be stored in the summaries folder, with a subfolder
         for separate dates.
 
-    WEBSITE denotes where the file is saved
+    WEBSITE denotes the directory where the website files are saved
     """
 
     # Load saved HN api data
@@ -154,9 +213,8 @@ def constructWebsite():
     webpage = ""
     webpage += websiteBlocks.HEADER
 
-    storyNum = 0
-
     for folder in sumUtil.listDirectory(SUM_DIR):
+        storyNum = 0
 
         webpage += formatDate(folder)
 
@@ -169,7 +227,24 @@ def constructWebsite():
         if len(fileList) % STORIES_PER_ROW != 0:
             webpage += websiteBlocks.ROW_END
 
-    sumUtil.saveFile(webpage, WEBSITE)
+        # Paganation
+        if isToday(folder):
+            continue
+        elif isYesterday(folder):
+            webpage += pagerIndex()
+            sumUtil.saveFile(webpage, WEBSITE_DIR + "index.html")
+
+            webpage = ""
+            webpage += websiteBlocks.HEADER
+            storyNum = 0
+        else:
+            webpage += pager(folder)
+            sumUtil.saveFile(webpage, WEBSITE_DIR + folder + ".html")
+
+            webpage = ""
+            webpage += websiteBlocks.HEADER
+            storyNum = 0
+
 
 if __name__ == '__main__':
     constructWebsite()
