@@ -190,11 +190,17 @@ def pager(text):
     thisDate = datetime.date(int(year), int(month), int(day))
     next = (thisDate - datetime.timedelta(days=1)).isoformat() + ".html"
     prev = (thisDate + datetime.timedelta(days=1)).isoformat() + ".html"
+    today = datetime.date.today().isoformat() + ".html"
+    yest = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    yest += ".html"
 
     if os.path.isfile(next):
         return websiteBlocks.PAGER.format(prev, next)
     else:
-        return websiteBlocks.PAGER_END.format(prev)
+        if prev == today or prev == yest:
+            return websiteBlocks.PAGER_END.format("index.html")
+        else:
+            return websiteBlocks.PAGER_END.format(prev)
 
 
 def constructWebsite():
