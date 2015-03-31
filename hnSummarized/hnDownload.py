@@ -68,7 +68,10 @@ def goodOnly(storyIDs):
         try:
             if isGoodStory(query):
                 goodStories.append(query)
-                print query["title"], query["score"]
+                try:
+                    print query["title"], query["score"]
+                except UnicodeEncodeError:
+                    print "Bad title"
         except KeyError:
             print "Error on ", str(sID)
     return goodStories
