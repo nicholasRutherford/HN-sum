@@ -1,3 +1,4 @@
 cd ~/HN-sum/
 python hnSummarized/updateWebsite.py
-sudo sh ~/HN-sum/bin/moveFiles.sh
+cd ~/HN-sum/hnSummarized/website
+cp * /var/www/hn-sum.info/html/
