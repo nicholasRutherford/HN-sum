@@ -12,6 +12,7 @@ NUM_KEYWORDS = 4
 def summariseAll():
     for folder in sumUtil.listDirectory(TEXT_DIR):
         for downFile in sumUtil.listDirectory(TEXT_DIR + folder):
+            print downFile
             path = TEXT_DIR + folder + "/" + downFile
 
             rawText = sumUtil.loadFile(path)
