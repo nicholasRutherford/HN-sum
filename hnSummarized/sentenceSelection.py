@@ -56,7 +56,7 @@ def add_nodes(g, sentList):
         g.add_node(sentence)
 
 
-def add_edges(g, sentList,stop_words):
+def add_edges(g, sentList, stop_words):
     """Add weighted edges to the graph
 
     Args:
