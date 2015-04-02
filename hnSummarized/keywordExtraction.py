@@ -136,7 +136,7 @@ def extract(wordList, K, threshold):
     construct_graph(g, wordList, threshold)
 
     # Compute values
-    pairs = nx.pagerank_numpy(g).items()
+    pairs = nx.pagerank(g, max_iter=10).items()
     pairs = sorted(pairs, key=lambda x: x[1], reverse=True)
 
     return [x[0] for x in pairs[:K]]

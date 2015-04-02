@@ -123,7 +123,7 @@ def text_rank(sentList, stop_words):
     g = nx.Graph()
 
     construct_graph(g, sentList, stop_words)
-    scores = nx.pagerank_numpy(g).items()
+    scores = nx.pagerank(g, max_iter=10).items()
     scores = sorted(scores, key=lambda x: x[1], reverse=True)
     return scores
 
