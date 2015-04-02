@@ -1,4 +1,4 @@
-cd /home/nick/HN-sum/
+cd /home/root/HN-sum/
 python hnSummarized/updateWebsite.py
-cd /home/nick/HN-sum/hnSummarized/website
+cd /home/root/HN-sum/hnSummarized/website
 cp * /var/www/hn-sum.info/html/
