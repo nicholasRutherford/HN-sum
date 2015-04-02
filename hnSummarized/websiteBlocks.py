@@ -1,6 +1,5 @@
 """
 Author: Nicholas Rutherford
-License: MIT
 """
 
 HEADER = """
