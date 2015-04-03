@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>HN Summarized</title>
+  <meta name="keywords" content="Hacker News Summarized, HN-sum">
+  <meta name="description" content="A summarized version of Hacker News">
+  <meta name="author" content="Nicholas Rutherford">
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="custom.css">
+</head>
+
+<body>
+
+<div class="container-fluid">
+<span id="forkongithub"><a href="https://github.com/nicholasRutherford/HN-sum">Fork me on GitHub</a></span>
+
+<div class="jumbotron">
+    <h1 class="text-center">HN Summarized</h1>
+</div>
+
+</div>
+
+<div class="container">
+<div class="row">
+    <div class="col-sm-6">
+        <h2>What is going on here?</h2>
+        <p>
+            This page pulls the 'good' stories from <a href="https://news.ycombinator.com/">Hacker News</a>
+            and provides a short summary of the linked articles. We say that any article that meets the following
+            criteria is a good story:
+            <ul>
+                <li>The story has a score > 100
+                <li>The story title contrains the word 'haskell'. Note, we only look at 'Top Stories', not 'New Stories'.
+                    This means we are not showing every submission about haskell, they must have at least a few votes first.
+            </ul>
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <h2>How are the summaries performed?</h2>
+        <p>
+            The algorithm used to provide the text summaries and keywords is
+            the TextRank algorithm outlined in the paper
+            <a href = "http://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf">TextRank : Bringing Order into Texts</a>
+             by Rada Mihalcea and Paul Tarau.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Is the code available?</h2>
+        <p>
+            Yes the entire source code is available on my
+            <a href ="https://github.com/nicholasRutherford/HN-sum">github page</a>, released under AGPL V3.
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <h2>Author:</h2>
+        <p>
+            <ul>
+                <li> Nicholas Rutherford
+                <li> Email: <a href="http://www.google.com/recaptcha/mailhide/d?k=01ncc726fFMUEHv8sz5LEobQ==&amp;c=F4hdZPCM9tLJixzsIVMOwdbKDjm0PTC4PXaY1KWSKGo=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501ncc726fFMUEHv8sz5LEobQ\75\75\46c\75F4hdZPCM9tLJixzsIVMOwdbKDjm0PTC4PXaY1KWSKGo\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">Click to reveal</a>
+            </ul>
+        </p>
+    </div>
+</div>
+
+<ul class="pager">
+  <li><a href="index.html">Main Page</a></li>
+</ul>
+</div>
+
+</body>
+</html>
