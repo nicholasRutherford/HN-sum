@@ -1,7 +1,7 @@
 # HN-sum
 A website that takes the best stories from [Hacker News](https://news.ycombinator.com/)
 and provides a brief summary of their articles. The live site can be found here:
-[www.hn-sum.info](www.hn-sum.info)
+[www.hn-sum.info](http://www.hn-sum.info)
 
 ## Instillation
 ### Docker
