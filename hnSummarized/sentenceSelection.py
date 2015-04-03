@@ -41,6 +41,37 @@ def word_tokenize(s, stop_words):
     return quality_words
 
 
+def goodSentence(sentList):
+    """Remove sentences that contain code
+
+    Args:
+        sentList ([str]) - A list of sentences to filter
+
+    Returns:
+        [str] - A list of the good sentences
+    """
+    good_sent = []
+    for sent in sentList:
+        if sent.count(">") > 0:
+            continue
+        if sent.count("<") > 0:
+            continue
+        if sent.count("(") > 0:
+            continue
+        if sent.count(")") > 0:
+            continue
+        if sent.count("{") > 0:
+            continue
+        if sent.count("}") > 0:
+            continue
+        if sent.count(";") > 0:
+            continue
+        if len(sent) > 375:
+            continue
+        good_sent.append(sent)
+    return good_sent
+
+
 def tokeniseSentences(rawText):
     """Convert a block of text into a list of sentences
 
@@ -55,7 +86,8 @@ def tokeniseSentences(rawText):
 
     # Load pre-learned sentence detector, and split into sentences
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-    return sent_detector.tokenize(rawText)
+    sent_list = sent_detector.tokenize(rawText)
+    return goodSentence(sent_list)
 
 
 def add_nodes(g, sentList):
