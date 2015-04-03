@@ -5,7 +5,7 @@ and provides a brief summary of their articles. The live site can be found here:
 
 ## Instillation
 ### Docker
-![Docker Badge](/docs/hn-sum.svg)
+![Docker Badge](/docs/docker-badge.png)
 
 A docker container is available for use and can be found at
 [nicholasrutherford / hn-sum](https://registry.hub.docker.com/u/nicholasrutherford/hn-sum/).
@@ -41,7 +41,7 @@ To fetch new stories and provide the summary:
 ## Algorithm
 The algorithm used to provide the text summaries and keywords is the TextRank
 algorithm outlined in the paper
-[TextRank : Bringing Order into Texts](web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf) by
+[TextRank : Bringing Order into Texts](http://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf) by
 Rada Mihalcea and Paul Tarau.
 
 ## License
