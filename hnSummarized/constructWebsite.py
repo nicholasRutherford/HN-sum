@@ -251,6 +251,7 @@ def constructWebsite():
             continue
         elif isYesterday(folder):
             webpage += pagerIndex()
+            webpage += websiteBlocks.FOOTER
             sumUtil.saveFile(webpage, WEBSITE_DIR + "index.html")
 
             webpage = ""
@@ -258,6 +259,7 @@ def constructWebsite():
             storyNum = 0
         else:
             webpage += pager(folder)
+            webpage += websiteBlocks.FOOTER
             sumUtil.saveFile(webpage, WEBSITE_DIR + folder + ".html")
 
             webpage = ""
