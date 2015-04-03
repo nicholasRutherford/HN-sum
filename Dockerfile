@@ -49,7 +49,7 @@ RUN apt-get install -y nginx
 
 
 # Copy a configuration file from the current directory
-ADD hn-sum.info /etc/nginx/sites-available/hn-sum.info
+ADD deploy/hn-sum.info /etc/nginx/sites-available/hn-sum.info
 
 # Link
 RUN ln -s /etc/nginx/sites-available/hn-sum.info /etc/nginx/sites-enabled/
