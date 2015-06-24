@@ -23,7 +23,7 @@ RUN apt-get install -y tar git curl nano wget dialog net-tools build-essential
 #         Setup python script             #
 ###########################################
 # Install Python and Basic Python Tools
-RUN apt-get install -y python python-dev python-distribute python-pip
+RUN apt-get install -y python python-dev-all python-distribute
 
 # Get application
 RUN git clone https://github.com/nicholasRutherford/HN-sum.git
