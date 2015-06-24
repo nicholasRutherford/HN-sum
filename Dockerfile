@@ -25,6 +25,10 @@ RUN apt-get install -y tar git curl nano wget dialog net-tools build-essential
 # Install Python and Basic Python Tools
 RUN apt-get install -y python python-dev python-distribute
 
+# Get pip
+RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+RUN python get-pip.py
+
 # Get application
 RUN git clone https://github.com/nicholasRutherford/HN-sum.git
 
