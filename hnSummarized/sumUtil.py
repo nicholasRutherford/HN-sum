@@ -20,6 +20,7 @@ import os
 import json
 
 INFO_JSON = "./hnSummarized/info.json"
+FAILED_JSON = "./hnSummarized/failed.json"
 
 
 def loadFile(path):
@@ -43,6 +44,46 @@ def loadFile(path):
     rawText = rawFile.read()
     rawFile.close()
     return rawText
+
+
+def loadFailed():
+    """Load the failed.json file
+
+    Returns:
+        list - list of strings of story IDs that failed to summarize
+
+    Raises:
+        Exit - If unable to open the fileName passed in.
+    """
+    try:
+        rawFile = open(FAILED_JSON, "r")
+        failed = json.load(rawFile)
+        rawFile.close()
+        return failed
+    except IOError:
+        rawFile = open(FAILED_JSON, "w+")
+        rawFile.write("[]")
+        rawFile.close()
+        return []
+
+
+def saveFailed(failed):
+    """Saves the failed.json file
+
+    Args:
+        failed - The current failed list to save
+
+    Raises:
+        Exit - If unable to open the file
+    """
+    try:
+        rawFile = open(FAILED_JSON, "w+")
+    except IOError:
+        print "Error: Can't open the file ", FAILED_JSON
+        sys.exit(1)
+
+    json.dump(failed, rawFile)
+    rawFile.close()
 
 
 def loadInfo():
