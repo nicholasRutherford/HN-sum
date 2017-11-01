@@ -1,3 +1,7 @@
+There are a number of things that are wrong with this project, but somehow
+it seems to still work. Don't use it as an example of a good way to do
+anything. :(
+
 # HN-sum
 A website that takes the best stories from [Hacker News](https://news.ycombinator.com/)
 and provides a brief summary of their articles. The live site can be found here:
@@ -5,7 +9,6 @@ and provides a brief summary of their articles. The live site can be found here:
 
 ## Instillation
 ### Docker
-![Docker Badge](/docs/docker-badge.png)
 
 A docker container is available for use and can be found at
 [nicholasrutherford / hn-sum](https://registry.hub.docker.com/u/nicholasrutherford/hn-sum/).
